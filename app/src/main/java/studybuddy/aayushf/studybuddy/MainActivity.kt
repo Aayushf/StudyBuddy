@@ -67,6 +67,21 @@ class MainActivity : AppCompatActivity() {
 
         }
         updateTabs()
+        (tabs as TabLayout).addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                title = tab!!.text
+
+            }
+
+        })
 
     }
 
