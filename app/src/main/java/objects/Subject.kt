@@ -7,7 +7,7 @@ import java.util.*
 /**
  * Created by aayushf on 14/8/17.
  */
-class Subject(var name:String = "Unspecified"):RealmObject() {
+open class Subject(var name:String = "Unspecified"):RealmObject() {
     @PrimaryKey
     var id:Long = 0
     init {

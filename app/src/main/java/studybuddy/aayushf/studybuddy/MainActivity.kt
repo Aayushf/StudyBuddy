@@ -19,6 +19,11 @@ import android.view.View
 import android.view.ViewGroup
 
 import android.widget.TextView
+import org.jetbrains.anko.customView
+import database.RealmInteractor
+import kotlinx.android.synthetic.main.activity_main.*
+import org.jetbrains.anko.alert
+import org.jetbrains.anko.editText
 
 class MainActivity : AppCompatActivity() {
 
@@ -45,21 +50,23 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mMainTabsPager = MainTabsPager(supportFragmentManager)
+        mMainTabsPager = MainTabsPager(supportFragmentManager, this)
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = findViewById<View>(R.id.container) as ViewPager
-        mViewPager!!.adapter = mMainTabsPager
+//        mViewPager!!.adapter = mMainTabsPager
 
-        val tabLayout = findViewById<View>(R.id.tabs) as TabLayout
-        tabLayout.setupWithViewPager(mViewPager)
+//        val tabLayout = findViewById<View>(R.id.tabs) as TabLayout
+//        tabLayout.setupWithViewPager(mViewPager)
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
+            addSubject()
 
 
 
         }
+        updateTabs()
 
     }
 
@@ -84,7 +91,27 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
     fun addSubject(){
+        alert {
+            customView {
+                val e = editText {
+                    hint = "Enter Subject Name Here"
+                }
+                positiveButton("Add This Subject", {
+                    RealmInteractor.addSubjectToDatabase(this@MainActivity, e.getText().toString())
+                    updateTabs()
 
+                })
+
+            }
+
+        }.show()
+
+    }
+    fun updateTabs(){
+        if (RealmInteractor.getAllSubjects(this).size!=0) {
+            mViewPager?.adapter = MainTabsPager(supportFragmentManager, this)
+            (tabs as TabLayout).setupWithViewPager(mViewPager)
+        }
     }
 
     /**

@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'realm-android'
+apply plugin: 'kotlin-android-extensions'
 
 
 android {
@@ -27,13 +28,14 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile 'org.jetbrains.anko:anko-sdk23:0.8.2'
-    compile 'org.jetbrains.anko:anko-appcompat-v7:0.8.2'
-    compile 'com.android.support:appcompat-v7:26.0.1'
-    compile 'com.android.support:design:26.0.1'
-    testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    compile "org.jetbrains.anko:anko-sdk25:$anko_version"
+    compile "org.jetbrains.anko:anko-appcompat-v7:$anko_version"
+    compile "com.android.support:appcompat-v7:26.0.1"
+    compile 'com.android.support:design:26.0.1'
+    compile 'com.android.support:support-v4:26.+'
+    testCompile 'junit:junit:4.12'
 }
 repositories {
     mavenCentral()

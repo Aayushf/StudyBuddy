@@ -1,32 +1,36 @@
 package adapters
 
+import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import database.RealmInteractor
+import fragments.SubjectFragment
+import objects.Subject
 import studybuddy.aayushf.studybuddy.MainActivity
 
 /**
  * Created by aayushf on 14/8/17.
  */
- class MainTabsPager(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+ class MainTabsPager(fm: FragmentManager, c:Context) : FragmentPagerAdapter(fm) {
+    var l = listOf<Subject>()
+    init {
+        l = RealmInteractor.getAllSubjects(c)
+
+    }
 
     override fun getItem(position: Int): Fragment {
         // getItem is called to instantiate the fragment for the given page.
         // Return a PlaceholderFragment (defined as a static inner class below).
-        return MainActivity.PlaceholderFragment.newInstance(position + 1)
+        return SubjectFragment(l[position].id)
     }
 
     override fun getCount(): Int {
         // Show 3 total pages.
-        return 3
+        return l.size
     }
 
     override fun getPageTitle(position: Int): CharSequence? {
-        when (position) {
-            0 -> return "SECTION 1"
-            1 -> return "SECTION 2"
-            2 -> return "SECTION 3"
-        }
-        return null
+    return l[position].name
     }
 }
