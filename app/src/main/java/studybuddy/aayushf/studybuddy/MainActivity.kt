@@ -19,11 +19,11 @@ import android.view.View
 import android.view.ViewGroup
 
 import android.widget.TextView
-import org.jetbrains.anko.customView
 import database.RealmInteractor
 import kotlinx.android.synthetic.main.activity_main.*
-import org.jetbrains.anko.alert
-import org.jetbrains.anko.editText
+import objects.Topic
+import org.jetbrains.anko.*
+import org.jetbrains.anko.selector
 
 class MainActivity : AppCompatActivity() {
 
@@ -61,13 +61,12 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
-            addSubject()
-
+            addTopic()
 
 
         }
         updateTabs()
-        (tabs as TabLayout).addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        (tabs as TabLayout).addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
 
             }
@@ -99,15 +98,17 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
 
 
-        if (id == R.id.action_settings) {
-            return true
+        if (id == R.id.action_add_subject) {
+            addSubject()
         }
 
         return super.onOptionsItemSelected(item)
     }
-    fun addSubject(){
+
+    fun addSubject() {
         alert {
             customView {
+                title = "Add A Subject"
                 val e = editText {
                     hint = "Enter Subject Name Here"
                 }
@@ -122,15 +123,50 @@ class MainActivity : AppCompatActivity() {
         }.show()
 
     }
-    fun updateTabs(){
-        if (RealmInteractor.getAllSubjects(this).size!=0) {
+
+    fun updateTabs() {
+        if (RealmInteractor.getAllSubjects(this).size != 0) {
             mViewPager?.adapter = MainTabsPager(supportFragmentManager, this)
             (tabs as TabLayout).setupWithViewPager(mViewPager)
         }
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    
+    fun addTopic() {
+        alert {
+            val allSubjects = RealmInteractor.getAllSubjectStrings(this@MainActivity)
+            var subjectId: Long = 0
+            customView {
+                verticalLayout {
+                    button {
+                        text = "Choose Subject"
+                        setOnClickListener {
+                            selector("Choose Subject", allSubjects, { _, i ->
+                                subjectId = RealmInteractor.getIdOfSubject(this@MainActivity, allSubjects[i])
+                            })
+                        }
+                    }
+                    title = "Add A Topic"
+
+                    val e = editText {
+                        hint = "Enter Topic Name Here"
+                    }
+                    positiveButton("Add This Topic", {
+                        RealmInteractor.addTopicToDatabase(this@MainActivity, Topic(e.text.toString(), subjectId))
+                        updateTabs()
+
+                    })
+
+                }
+
+            }
+
+
+        }.show()
+
+        /**
+         * A placeholder fragment containing a simple view.
+         */
+
+    }
 }
+
