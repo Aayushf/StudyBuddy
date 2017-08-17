@@ -53,6 +53,18 @@ class RealmInteractor {
             r.commitTransaction()
 
         }
+        fun getTopicNameFromID(c:Context, id:Long):String{
+            Realm.init(c)
+             return Realm.getDefaultInstance().where(Topic::class.java).equalTo("id", id).findFirst().name
+        }
+        fun getAllTopicIDsOfSubject(c:Context, subjectID:Long):List<Long>{
+            Realm.init(c)
+            val l = Realm.getDefaultInstance().where(Topic::class.java).equalTo("subjectid", subjectID).findAll().toList()
+            return l.map {
+                it.id
+            }
+
+        }
 
 
 

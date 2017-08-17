@@ -1,11 +1,14 @@
 package fragments
 
 
+import ViewItems.TopicViewItem
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import database.RealmInteractor
 import kotlinx.android.synthetic.main.fragment_subject.*
 
@@ -15,7 +18,7 @@ import studybuddy.aayushf.studybuddy.R
 /**
  * A simple [Fragment] subclass.
  */
-class SubjectFragment(var subject:Long = 0) : Fragment() {
+class SubjectFragment(var subjectID:Long = 0) : Fragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -31,7 +34,15 @@ class SubjectFragment(var subject:Long = 0) : Fragment() {
     }
 
     fun refreshView(){
-        subfragtv.text = RealmInteractor.getSubjectOfID(activity, subject)
+        subfragtv.text = RealmInteractor.getSubjectOfID(activity, subjectID)
+        val fadap:FastItemAdapter<TopicViewItem> = FastItemAdapter()
+        val listOfTopics = RealmInteractor.getAllTopicIDsOfSubject(activity, subjectID)
+        listOfTopics.forEach {t ->
+            fadap.add(TopicViewItem(t, activity))
+        }
+        rvsubjectfrag.layoutManager  = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+        rvsubjectfrag.adapter = fadap
+
 
     }
 
