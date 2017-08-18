@@ -2,6 +2,7 @@ package database
 
 import android.content.Context
 import io.realm.Realm
+import objects.Definition
 import objects.Subject
 import objects.Topic
 
@@ -65,6 +66,26 @@ class RealmInteractor {
             }
 
         }
+        fun getAllTopicStringsOfSubject(c:Context, subjectID:Long):List<String>{
+            Realm.init(c)
+            val l = Realm.getDefaultInstance().where(Topic::class.java).equalTo("subjectid", subjectID).findAll().toList()
+            return l.map {
+                it.name
+            }
+
+        }
+        fun getTopicIdFromString(c:Context,topic:String):Long{
+            Realm.init(c)
+            return Realm.getDefaultInstance().where(Topic::class.java).equalTo("name", topic).findFirst().id
+        }
+        fun addDefinitionToDatabase(c:Context, d:Definition){
+            Realm.init(c)
+            val r = Realm.getDefaultInstance()
+            r.beginTransaction()
+            r.copyToRealm(d)
+            r.commitTransaction()
+        }
+
 
 
 

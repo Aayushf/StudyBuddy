@@ -17,14 +17,16 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
 
 import android.widget.TextView
 import database.RealmInteractor
 import kotlinx.android.synthetic.main.activity_main.*
+import objects.Definition
 import objects.Topic
 import org.jetbrains.anko.*
 import org.jetbrains.anko.selector
-
 class MainActivity : AppCompatActivity() {
 
     /**
@@ -61,8 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         val fab = findViewById<View>(R.id.fab) as FloatingActionButton
         fab.setOnClickListener { view ->
-            addTopic()
-
+            itemTypeSelect()
 
         }
         updateTabs()
@@ -100,6 +101,8 @@ class MainActivity : AppCompatActivity() {
 
         if (id == R.id.action_add_subject) {
             addSubject()
+        }else if(id == R.id.action_add_topic){
+            addTopic()
         }
 
         return super.onOptionsItemSelected(item)
@@ -167,6 +170,62 @@ class MainActivity : AppCompatActivity() {
          * A placeholder fragment containing a simple view.
          */
 
+    }
+    fun itemTypeSelect(){
+        selector("Select Type Of Item To Add", listOf("Definition"), {_, i->
+            if(i==0){
+                addDefinition()
+            }
+
+        })
+    }
+    fun addDefinition(){
+        alert{
+            customView {
+                title = "Add A Defenetion"
+                var etname:EditText
+                var etdefinition:EditText
+                var btnTopic:Button
+                val allSubjects = RealmInteractor.getAllSubjectStrings(this@MainActivity)
+                var subjectId: Long = 0
+                var allTopicsOfSubject:List<String> = listOf()
+                var topicId: Long = 0
+                verticalLayout {
+                    button {
+                        text = "Choose Subject"
+                        setOnClickListener {
+                            selector("Choose Subject", allSubjects, { _, i ->
+                                subjectId = RealmInteractor.getIdOfSubject(this@MainActivity, allSubjects[i])
+                                allTopicsOfSubject = RealmInteractor.getAllTopicStringsOfSubject(this@MainActivity, subjectId)
+                            })
+                        }
+                    }
+                    button {
+                        text = "Choose Topic"
+                        setOnClickListener {
+                            selector("Choose Topic", allTopicsOfSubject, {_, i->
+                                topicId = RealmInteractor.getTopicIdFromString(this@MainActivity, allTopicsOfSubject[i])
+                            })
+                        }
+
+                    }
+
+                    etname = editText {
+                        hint = "Enter Name Here"
+
+                    }
+                    etdefinition = editText {
+                        hint = "Enter Defenetion Here"
+                    }
+                    positiveButton("Add", {
+                        RealmInteractor.addDefinitionToDatabase(this@MainActivity, Definition(topicId, etname.text.toString(), etdefinition.text.toString()))
+
+                    })
+
+                }
+
+            }
+        }.show()
     }
 }
 

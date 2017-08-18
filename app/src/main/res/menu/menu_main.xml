@@ -6,6 +6,13 @@
         android:id="@+id/action_add_subject"
         android:orderInCategory="100"
         android:title="Add a Subject"
-        app:showAsAction="always"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_add_circle"
+        />
+    <item
+        android:id="@+id/action_add_topic"
+        android:orderInCategory="100"
+        android:title="Add a Topic"
+        app:showAsAction="never"
         android:icon="@drawable/ic_add_circle"/>
 </menu>
