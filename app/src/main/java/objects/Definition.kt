@@ -9,11 +9,15 @@ import java.util.*
 /**
  * Created by aayushf on 17/8/17.
  */
-open class Definition(topicID:Long = 0, var name:String = "Unspecified", var definition:String = "Unspecified") : RealmObject() {
+open class Definition(var topicID:Long = 0, var name:String = "Unspecified", var definition:String = "Unspecified") : RealmObject() {
     @PrimaryKey
     var itemid:Long = 0
     init {
         itemid = Calendar.getInstance().timeInMillis
     }
+    companion object {
+        val TYPE = 0
+    }
+
 
 }

@@ -9,6 +9,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/innerrl1">
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -31,6 +35,18 @@
             android:text="TextView"
             android:textAppearance="@style/TextAppearance.AppCompat.Display2"
             android:textStyle="bold" />
+
+    </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/innerrl1">
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/topiccardrv"></android.support.v7.widget.RecyclerView>
+
+        </LinearLayout>
 
     </RelativeLayout>
 

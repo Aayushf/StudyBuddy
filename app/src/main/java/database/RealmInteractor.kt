@@ -85,6 +85,15 @@ class RealmInteractor {
             r.copyToRealm(d)
             r.commitTransaction()
         }
+        fun getItem(c:Context, id:Long):Any{
+            Realm.init(c)
+            return Realm.getDefaultInstance().where(Definition::class.java).equalTo("itemid", id).findFirst()
+        }
+        fun getItemIDsOfTopic(c:Context, topicid:Long):List<Long>{
+            Realm.init(c)
+            val definitions = Realm.getDefaultInstance().where(Definition::class.java).equalTo("topicID", topicid).findAll().toList()
+            return definitions.map { it.itemid }
+        }
 
 
 

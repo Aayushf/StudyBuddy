@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     positiveButton("Add", {
                         RealmInteractor.addDefinitionToDatabase(this@MainActivity, Definition(topicId, etname.text.toString(), etdefinition.text.toString()))
-
+                        updateTabs()
                     })
 
                 }
