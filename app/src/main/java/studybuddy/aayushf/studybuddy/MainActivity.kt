@@ -27,7 +27,11 @@ import objects.Definition
 import objects.Topic
 import org.jetbrains.anko.*
 import org.jetbrains.anko.selector
-class MainActivity : AppCompatActivity() {
+import org.polaric.colorful.CActivity
+import org.polaric.colorful.ColorPickerDialog
+import org.polaric.colorful.Colorful
+
+class MainActivity : CActivity() {
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -46,6 +50,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Colorful.defaults()
+                .primaryColor(Colorful.ThemeColor.RED)
+                .accentColor(Colorful.ThemeColor.BLUE)
+                .translucent(false)
+                .dark(true)
+        Colorful.init(this)
         setContentView(R.layout.activity_main)
 
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
@@ -99,10 +109,10 @@ class MainActivity : AppCompatActivity() {
         val id = item.itemId
 
 
-        if (id == R.id.action_add_subject) {
-            addSubject()
-        }else if(id == R.id.action_add_topic){
-            addTopic()
+        when (id) {
+            R.id.action_add_subject -> addSubject()
+            R.id.action_add_topic -> addTopic()
+            R.id.action_theme -> showThemeChooser()
         }
 
         return super.onOptionsItemSelected(item)
@@ -224,6 +234,50 @@ class MainActivity : AppCompatActivity() {
 
                 }
 
+            }
+        }.show()
+    }
+    fun showThemeChooser(){
+        alert {
+            customView {
+                var primaryColor:Colorful.ThemeColor = Colorful.ThemeColor.BLUE
+                var accentColor:Colorful.ThemeColor = Colorful.ThemeColor.AMBER
+
+                verticalLayout {
+                    val c = checkBox {
+                        text = "Set Dark Theme?"
+                    }
+                    button {
+                        text = "Choose Primary Colour"
+                        setOnClickListener {
+                            val cpd = ColorPickerDialog(this@MainActivity)
+                            cpd.setOnColorSelectedListener { c->
+                                primaryColor = c
+
+
+                            }
+                            cpd.show()
+                        }
+                    }
+                    button {
+                        text = "Choose Accent Colour"
+                        setOnClickListener {
+                            val cpd = ColorPickerDialog(this@MainActivity)
+                            cpd.setOnColorSelectedListener { c->
+                                accentColor = c
+
+
+                            }
+                            cpd.show()
+                        }
+
+                    }
+                    positiveButton("Apply", {
+                        Colorful.config(this@MainActivity).primaryColor(primaryColor).accentColor(accentColor).dark(c.isChecked).translucent(false).apply()
+                        toast("Restart App For Changes To Apply")
+
+                    })
+                }
             }
         }.show()
     }

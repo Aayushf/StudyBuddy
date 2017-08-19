@@ -15,4 +15,11 @@
         android:title="Add a Topic"
         app:showAsAction="never"
         android:icon="@drawable/ic_add_circle"/>
+    <item
+        android:id="@+id/action_theme"
+        android:title="Change Theme"
+        android:icon="@drawable/ic_palette"
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        />
 </menu>
