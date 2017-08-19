@@ -22,4 +22,8 @@
         app:showAsAction="always"
         android:orderInCategory="1"
         />
+    <item
+        android:title="[Testing]Go To Drawing"
+        android:id="@+id/action_drawing"
+        android:orderInCategory="1000"/>
 </menu>

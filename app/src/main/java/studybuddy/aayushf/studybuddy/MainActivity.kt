@@ -113,6 +113,7 @@ class MainActivity : CActivity() {
             R.id.action_add_subject -> addSubject()
             R.id.action_add_topic -> addTopic()
             R.id.action_theme -> showThemeChooser()
+            R.id.action_drawing -> startActivity<DrawingActivity>()
         }
 
         return super.onOptionsItemSelected(item)
