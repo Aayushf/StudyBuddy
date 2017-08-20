@@ -30,6 +30,7 @@ class DrawView(c:Context, attr:AttributeSet): View(c, attr) {
         canvasPaint = Paint(Paint.DITHER_FLAG)
 
 
+
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
