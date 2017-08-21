@@ -13,9 +13,6 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import java.util.UUID.randomUUID
 import android.provider.MediaStore
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
-import org.jetbrains.anko.toast
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,6 +20,12 @@ import java.util.*
 import java.nio.file.Files.exists
 import android.media.MediaScannerConnection
 import android.net.Uri
+import android.view.Menu
+import android.view.MenuItem
+import drawing.DrawView
+import org.jetbrains.anko.*
+import org.polaric.colorful.ColorPickerDialog
+import org.polaric.colorful.Colorful
 
 
 class DrawingActivity : AppCompatActivity(), AnkoLogger {
@@ -83,6 +86,41 @@ class DrawingActivity : AppCompatActivity(), AnkoLogger {
 
         }
 
+    }
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_drawing, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        val id = item.itemId
+        when(id){
+            R.id.action_pen -> showPrefsDialog()
+            R.id.action_erase -> drawview.setEraseMode()
+            R.id.action_write -> drawview.unSetEraseMode()
+
+        }
+        return true
+    }
+    fun showPrefsDialog(){
+        alert {
+            customView {
+                button {
+                    text = "Choose Pen Colour"
+                    setOnClickListener {
+                        val cpd = ColorPickerDialog(this@DrawingActivity)
+                                cpd.setOnColorSelectedListener ({ c->
+                            (drawview as DrawView).paintColour = resources.getColor(c.colorRes)
+                        })
+                        cpd.show()
+                    }
+                }
+            }
+        }.show()
     }
 
 }

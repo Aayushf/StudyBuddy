@@ -18,12 +18,17 @@ class DrawView(c:Context, attr:AttributeSet): View(c, attr) {
     var drawPaint = Paint()
     var canvasPaint = Paint()
     var drawCanvas = Canvas()
-    var paintColour = 0xFF660000.toInt()
+    var paintColour = 0xFF03A9F4.toInt()
+    set(value){
+        drawPaint.color = value
+
+    }
+    var bgcolor = 0xFF263238.toInt()
     var canvasBitmap:Bitmap? = null
     private fun setupDrawing(){
         drawPaint.color = paintColour
         drawPaint.isAntiAlias = true
-        drawPaint.strokeWidth = 20f
+        drawPaint.strokeWidth = 7.5f
         drawPaint.style = Paint.Style.STROKE
         drawPaint.strokeJoin = Paint.Join.ROUND
         drawPaint.strokeCap = Paint.Cap.ROUND
@@ -36,6 +41,7 @@ class DrawView(c:Context, attr:AttributeSet): View(c, attr) {
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
         canvasBitmap = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        (canvasBitmap as Bitmap).eraseColor(bgcolor)
         drawCanvas = Canvas(canvasBitmap)
         setupDrawing()
     }
@@ -65,4 +71,15 @@ class DrawView(c:Context, attr:AttributeSet): View(c, attr) {
 
 
     }
+    fun setEraseMode(){
+        drawPaint.color = bgcolor
+        drawPaint.strokeWidth = 7f
+        drawPaint.style = Paint.Style.FILL
+
+    }
+    fun unSetEraseMode(){
+        setupDrawing()
+
+    }
+
 }
