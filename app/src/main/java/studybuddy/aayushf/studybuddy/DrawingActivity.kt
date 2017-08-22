@@ -6,6 +6,7 @@ import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_drawing.*
 import android.Manifest.permission
 import android.Manifest.permission.WRITE_CALENDAR
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Environment
@@ -22,6 +23,7 @@ import android.media.MediaScannerConnection
 import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
+import databaseandstorage.StorageInteractor
 import drawing.DrawView
 import org.jetbrains.anko.*
 import org.polaric.colorful.ColorPickerDialog
@@ -36,8 +38,14 @@ class DrawingActivity : AppCompatActivity(), AnkoLogger {
         drawview.isDrawingCacheEnabled = true
         fabsavedraw.setOnClickListener {
             obtainStoragePermission()
-            saveImage()
-            val imgSaved = MediaStore.Images.Media.insertImage(
+            val path = StorageInteractor.storeImageToStorage(this, drawview.drawingCache)
+            toast(path)
+            val i = Intent()
+            i.putExtra("drawingPath", path)
+            setResult(0, i)
+            drawview.destroyDrawingCache()
+            finish()
+            /*val imgSaved = MediaStore.Images.Media.insertImage(
                     contentResolver, drawview.getDrawingCache(),
                     UUID.randomUUID().toString() + ".png", "drawing")
             if (imgSaved != null){
@@ -46,7 +54,7 @@ class DrawingActivity : AppCompatActivity(), AnkoLogger {
                 toast("Image Not Saved")
             }
             drawview.destroyDrawingCache()
-
+*/
         }
     }
     fun obtainStoragePermission(){
@@ -57,36 +65,7 @@ class DrawingActivity : AppCompatActivity(), AnkoLogger {
         }
 
     }
-    fun saveImage(){
-        val f = File(Environment.getExternalStorageDirectory().toString())
-        var success = false
-            if (!f.exists()){
-                success = f.mkdirs()
-        }
-        info("$success$f")
-        val file = File(Environment.getExternalStorageDirectory().toString() + "/${UUID.randomUUID()}.png")
-        if (!file.exists()) {
-            try {
-                success = file.createNewFile()
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            info("$success$file")
-            var ostream: FileOutputStream? = null
-                ostream = FileOutputStream(file)
-                val drawing = drawview.drawingCache
-                val save = drawing.compress(Bitmap.CompressFormat.PNG, 100, ostream)
-            MediaScannerConnection.scanFile(this,
-                    arrayOf(file.toString()), null
-            ) { path, uri ->
-                info("Scanned $path:")
-                info("-> uri=" + uri)
-            }
 
-
-        }
-
-    }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.menu_drawing, menu)

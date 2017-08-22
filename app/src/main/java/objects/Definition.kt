@@ -9,7 +9,7 @@ import java.util.*
 /**
  * Created by aayushf on 17/8/17.
  */
-open class Definition(var topicID:Long = 0, var name:String = "Unspecified", var definition:String = "Unspecified") : RealmObject() {
+open class Definition(var topicID:Long = 0, var name:String = "Unspecified", var definition:String = "Unspecified", var scribblePath:String? = null ) : RealmObject() {
     @PrimaryKey
     var itemid:Long = 0
     init {

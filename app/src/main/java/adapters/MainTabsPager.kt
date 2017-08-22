@@ -4,10 +4,9 @@ import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import database.RealmInteractor
+import databaseandstorage.RealmInteractor
 import fragments.SubjectFragment
 import objects.Subject
-import studybuddy.aayushf.studybuddy.MainActivity
 
 /**
  * Created by aayushf on 14/8/17.

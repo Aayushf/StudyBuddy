@@ -7,7 +7,7 @@ import android.view.View
 import android.widget.TextView
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
-import database.RealmInteractor
+import databaseandstorage.RealmInteractor
 import objects.Definition
 import org.jetbrains.anko.find
 import studybuddy.aayushf.studybuddy.R

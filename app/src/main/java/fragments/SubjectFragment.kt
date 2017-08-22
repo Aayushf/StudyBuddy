@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
-import database.RealmInteractor
+import databaseandstorage.RealmInteractor
 import kotlinx.android.synthetic.main.fragment_subject.*
 
 import studybuddy.aayushf.studybuddy.R

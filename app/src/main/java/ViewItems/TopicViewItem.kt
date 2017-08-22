@@ -6,8 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.widget.TextView
 import com.mikepenz.fastadapter.items.AbstractItem
-import database.RealmInteractor
-import org.jetbrains.anko._ActionMenuView
+import databaseandstorage.RealmInteractor
 import org.jetbrains.anko.find
 import studybuddy.aayushf.studybuddy.R
 
