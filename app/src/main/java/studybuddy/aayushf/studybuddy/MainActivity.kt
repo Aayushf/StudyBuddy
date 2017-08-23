@@ -16,6 +16,7 @@ import android.widget.Button
 import android.widget.EditText
 import org.jetbrains.anko.startActivityForResult
 import databaseandstorage.RealmInteractor
+import databaseandstorage.StorageInteractor
 import kotlinx.android.synthetic.main.activity_main.*
 import objects.Definition
 import objects.Topic
@@ -25,7 +26,7 @@ import org.polaric.colorful.CActivity
 import org.polaric.colorful.ColorPickerDialog
 import org.polaric.colorful.Colorful
 
-class MainActivity : CActivity() {
+class MainActivity : CActivity() , AnkoLogger{
 
     /**
      * The [android.support.v4.view.PagerAdapter] that will provide
@@ -299,6 +300,19 @@ class MainActivity : CActivity() {
         }
 
 
+    }
+    fun showDrawingOfItem(itemid:Long){
+        alert{
+            customView {
+                title = "Show Scribble"
+                imageView {
+                    var path = (RealmInteractor.getItem(this@MainActivity, itemid) as Definition).scribblePath
+                    if(path != null)
+                    imageBitmap = StorageInteractor.getBitmapFromFile(this@MainActivity, path )
+                }
+            }
+        }.show()
+        info("ShowDrawingCalled")
     }
 }
 
