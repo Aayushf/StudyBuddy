@@ -1,6 +1,7 @@
 package ViewItems
 
 import android.content.Context
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
@@ -36,12 +37,13 @@ class TopicViewItem( val topicID:Long, val c:Context ) : AbstractItem<TopicViewI
         holder.rvtopic.adapter = GenericViewItem.getAdapterForTopic(c, topicID)
 
 
+
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val tvtopic = itemView.find<TextView>(R.id.topic_card_tv)
         val rvtopic = itemView.find<RecyclerView>(R.id.topiccardrv)
-
+        val fabtopic = itemView.find<FloatingActionButton>(R.id.fabcard)
 
     }
 }

@@ -314,5 +314,10 @@ class MainActivity : CActivity() , AnkoLogger{
         }.show()
         info("ShowDrawingCalled")
     }
+    fun goToRevise(topicID:Long){
+        val i = Intent(this@MainActivity, ReviseActivity::class.java)
+        i.putExtra("topicID", topicID)
+        startActivity(i)
+    }
 }
 
