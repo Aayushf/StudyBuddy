@@ -8,6 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import databaseandstorage.RealmInteractor
+import databaseandstorage.StorageInteractor
+import kotlinx.android.synthetic.main.item_fragment.view.*
+import kotlinx.android.synthetic.main.item_fragment_content.view.*
+import objects.Definition
 
 import studybuddy.aayushf.studybuddy.R
 
@@ -24,4 +28,15 @@ var item = RealmInteractor.getItem(c!!, itemID)
         return inflater!!.inflate(R.layout.item_fragment, container, false)
     }
 
-}// Required empty public constructor
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val v = view!!
+        if((item as Definition).scribblePath != null){
+            v.item_frag_imgview.setImageBitmap(StorageInteractor.getBitmapFromFile(context, (item as Definition).scribblePath!! ))
+        }
+        v.tvsec_item_frag.text = (item as Definition).definition
+        v.tvmain_item_frag.text = (item as Definition).name
+
+    }
+
+}
