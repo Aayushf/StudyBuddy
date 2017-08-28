@@ -38,7 +38,6 @@ class SubjectFragment(var subjectID:Long = 0) : Fragment() {
     }
 
     fun refreshView(){
-        subfragtv.text = RealmInteractor.getSubjectOfID(activity, subjectID)
         val fadap:FastItemAdapter<TopicViewItem> = FastItemAdapter()
         fadap.withEventHook(object : ClickEventHook<TopicViewItem>() {
             override fun onBind(viewHolder: RecyclerView.ViewHolder): View? {

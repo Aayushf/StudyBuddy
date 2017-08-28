@@ -5,6 +5,9 @@ import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import com.mikepenz.fastadapter.items.AbstractItem
 import databaseandstorage.RealmInteractor
@@ -35,6 +38,25 @@ class TopicViewItem( val topicID:Long, val c:Context ) : AbstractItem<TopicViewI
         holder.tvtopic.text = RealmInteractor.getTopicNameFromID(c,topicID )
         holder.rvtopic.layoutManager = LinearLayoutManager(c, LinearLayoutManager.VERTICAL, false)
         holder.rvtopic.adapter = GenericViewItem.getAdapterForTopic(c, topicID)
+        var expanded = false
+        holder.expandbutton.setOnClickListener {
+            if(!expanded){
+                holder.expandbutton.text = "Collapse"
+                val lp =  RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                lp.addRule(RelativeLayout.BELOW, R.id.innerrl1)
+                holder.llrvtopic.layoutParams = lp
+                expanded = true
+
+            }
+            else{
+                holder.expandbutton.text = "Expand"
+                val lp =  RelativeLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,0)
+                lp.addRule(RelativeLayout.BELOW, R.id.innerrl1)
+                holder.llrvtopic.layoutParams = lp
+                expanded = false
+
+            }
+            }
 
 
 
@@ -44,6 +66,8 @@ class TopicViewItem( val topicID:Long, val c:Context ) : AbstractItem<TopicViewI
         val tvtopic = itemView.find<TextView>(R.id.topic_card_tv)
         val rvtopic = itemView.find<RecyclerView>(R.id.topiccardrv)
         val fabtopic = itemView.find<FloatingActionButton>(R.id.fabcard)
+        val llrvtopic = itemView.find<LinearLayout>(R.id.llrvtopic)
+        val expandbutton = itemView.find<Button>(R.id.expandbutton)
 
     }
 }

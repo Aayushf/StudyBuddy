@@ -8,8 +8,18 @@
     android:layout_margin="@dimen/fab_margin">
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    <RelativeLayout
+        android:layout_height="wrap_content"
+        android:animateLayoutChanges="true">
+
+        <Button
+            android:id="@+id/expandbutton"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/llrvtopic"
+            android:text="Expand" />
+
+        <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/innerrl1">
@@ -37,14 +47,18 @@
             android:textStyle="bold" />
 
     </RelativeLayout>
+
         <LinearLayout
+            android:id="@+id/llrvtopic"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/innerrl1">
+            android:layout_height="0dp"
+            android:layout_below="@id/innerrl1"
+            android:animateLayoutChanges="true">
+
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/topiccardrv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/topiccardrv"></android.support.v7.widget.RecyclerView>
+                android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 
         </LinearLayout>
 
