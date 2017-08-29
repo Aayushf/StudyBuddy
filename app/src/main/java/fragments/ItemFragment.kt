@@ -12,6 +12,7 @@ import databaseandstorage.StorageInteractor
 import kotlinx.android.synthetic.main.item_fragment.view.*
 import kotlinx.android.synthetic.main.item_fragment_content.view.*
 import objects.Definition
+import studybuddy.aayushf.studybuddy.MainActivity
 
 import studybuddy.aayushf.studybuddy.R
 
@@ -19,7 +20,7 @@ import studybuddy.aayushf.studybuddy.R
 /**
  * A simple [Fragment] subclass.
  */
-class ItemFragment(itemID:Long = 0, c:Context? = null) : Fragment() {
+class ItemFragment(val itemID:Long = 0, val c:Context? = null) : Fragment() {
 var item = RealmInteractor.getItem(c!!, itemID)
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -36,6 +37,9 @@ var item = RealmInteractor.getItem(c!!, itemID)
         }
         v.tvsec_item_frag.text = (item as Definition).definition
         v.tvmain_item_frag.text = (item as Definition).name
+        v.fab.setOnClickListener {
+            (c as MainActivity).speakItem(itemID)
+        }
 
     }
 

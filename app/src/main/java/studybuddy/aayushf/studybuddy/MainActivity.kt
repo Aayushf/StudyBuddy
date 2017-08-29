@@ -1,6 +1,7 @@
 package studybuddy.aayushf.studybuddy
 
 import adapters.MainTabsPager
+import android.app.Fragment
 import android.content.Intent
 import android.support.design.widget.TabLayout
 import android.support.design.widget.FloatingActionButton
@@ -9,6 +10,7 @@ import android.support.v7.widget.Toolbar
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -17,7 +19,9 @@ import android.widget.EditText
 import org.jetbrains.anko.startActivityForResult
 import databaseandstorage.RealmInteractor
 import databaseandstorage.StorageInteractor
+import fragments.ItemFragment
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import objects.Definition
 import objects.Topic
 import org.jetbrains.anko.*
@@ -25,6 +29,7 @@ import org.jetbrains.anko.selector
 import org.polaric.colorful.CActivity
 import org.polaric.colorful.ColorPickerDialog
 import org.polaric.colorful.Colorful
+import java.util.*
 
 class MainActivity : CActivity() , AnkoLogger{
 
@@ -37,7 +42,7 @@ class MainActivity : CActivity() , AnkoLogger{
      * [android.support.v4.app.FragmentStatePagerAdapter].
      */
     private var mMainTabsPager: MainTabsPager? = null
-
+    private var mTTSObject:TextToSpeech? = null
     /**
      * The [ViewPager] that will host the section contents.
      */
@@ -76,6 +81,13 @@ class MainActivity : CActivity() , AnkoLogger{
             itemTypeSelect()
 
         }
+        mTTSObject = TextToSpeech(this, {t->
+            if (t!=TextToSpeech.ERROR){
+                mTTSObject?.language = Locale.US
+            }
+
+        })
+
         updateTabs()
         (tabs as TabLayout).addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -301,7 +313,7 @@ class MainActivity : CActivity() , AnkoLogger{
 
 
     }
-    fun showDrawingOfItem(itemid:Long){
+    fun onItemSelected(itemid:Long){
         alert{
             customView {
                 title = "Show Scribble"
@@ -313,11 +325,19 @@ class MainActivity : CActivity() , AnkoLogger{
             }
         }.show()
         info("ShowDrawingCalled")
+        val fragment = ItemFragment(itemid, this)
+        val ft = supportFragmentManager.beginTransaction()
+        ft.add(R.id.bsflmain, fragment)
+        ft.commit()
     }
     fun goToRevise(topicID:Long){
         val i = Intent(this@MainActivity, ReviseActivity::class.java)
         i.putExtra("topicID", topicID)
         startActivity(i)
+    }
+    fun speakItem(itemid: Long){
+        mTTSObject!!.speak((RealmInteractor.getItem(this, itemid) as Definition).definition, TextToSpeech.QUEUE_FLUSH, null )
+
     }
 }
 

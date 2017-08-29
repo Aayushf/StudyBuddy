@@ -82,7 +82,7 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
 
                 }
                 override fun onClick(v: View?, position: Int, fastAdapter: FastAdapter<GenericViewItem>?, item: GenericViewItem) {
-                    (item.c as MainActivity).showDrawingOfItem(item.itemid)
+                    (item.c as MainActivity).onItemSelected(item.itemid)
                 }
 
             })
