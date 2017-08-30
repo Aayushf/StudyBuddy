@@ -2,6 +2,8 @@ package databaseandstorage
 
 import android.content.Context
 import io.realm.Realm
+import io.realm.RealmObject
+import objects.Constant
 import objects.Definition
 import objects.Subject
 import objects.Topic
@@ -78,21 +80,36 @@ class RealmInteractor {
             Realm.init(c)
             return Realm.getDefaultInstance().where(Topic::class.java).equalTo("name", topic).findFirst().id
         }
-        fun addDefinitionToDatabase(c:Context, d:Definition){
+
+        fun addItemToDatabase(c: Context, i: Any) {
             Realm.init(c)
             val r = Realm.getDefaultInstance()
             r.beginTransaction()
-            r.copyToRealm(d)
+            r.copyToRealm(i as RealmObject)
             r.commitTransaction()
         }
         fun getItem(c:Context, id:Long):Any{
             Realm.init(c)
-            return Realm.getDefaultInstance().where(Definition::class.java).equalTo("itemid", id).findFirst()
+            val constant = Realm.getDefaultInstance().where(Constant::class.java).equalTo("itemid", id).findFirst()
+            return Realm.getDefaultInstance().where(Definition::class.java).equalTo("itemid", id).findFirst() ?: constant
         }
         fun getItemIDsOfTopic(c:Context, topicid:Long):List<Long>{
             Realm.init(c)
             val definitions = Realm.getDefaultInstance().where(Definition::class.java).equalTo("topicID", topicid).findAll().toList()
-            return definitions.map { it.itemid }
+            val constants = Realm.getDefaultInstance().where(Constant::class.java).equalTo("topicID", topicid).findAll().toList()
+            val listofall: MutableList<Any> = mutableListOf()
+            listofall.addAll(definitions)
+            listofall.addAll(constants)
+
+            return listofall.map {
+                var itemid: Long = 0
+                if (it is Definition) {
+                    itemid = it.itemid
+                } else if (it is Constant) {
+                    itemid = it.itemid
+                }
+                return@map itemid
+            }
         }
 
 

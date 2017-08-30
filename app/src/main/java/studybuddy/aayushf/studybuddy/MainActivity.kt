@@ -1,7 +1,6 @@
 package studybuddy.aayushf.studybuddy
 
 import adapters.MainTabsPager
-import android.app.Fragment
 import android.content.Intent
 import android.support.design.widget.TabLayout
 import android.support.design.widget.FloatingActionButton
@@ -22,6 +21,7 @@ import databaseandstorage.StorageInteractor
 import fragments.ItemFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import objects.Constant
 import objects.Definition
 import objects.Topic
 import org.jetbrains.anko.*
@@ -195,13 +195,80 @@ class MainActivity : CActivity() , AnkoLogger{
 
     }
     fun itemTypeSelect(){
-        selector("Select Type Of Item To Add", listOf("Definition"), {_, i->
+        selector("Select Type Of Item To Add", listOf("Definition", "Constant"), { _, i ->
             if(i==0){
                 addDefinition()
+            } else if (i == 1) {
+                addConstant()
             }
 
         })
     }
+
+    private fun addConstant() {
+        drawingURL = null
+        alert {
+            customView {
+                title = "Add A Defenetion"
+                var etname: EditText
+                var etdenoted: EditText
+                var etvalue: EditText
+                var btnTopic: Button
+                val allSubjects = RealmInteractor.getAllSubjectStrings(this@MainActivity)
+                var subjectId: Long = 0
+                var allTopicsOfSubject: List<String> = listOf()
+                var topicId: Long = 0
+                verticalLayout {
+                    button {
+                        text = "Choose Subject"
+                        setOnClickListener {
+                            selector("Choose Subject", allSubjects, { _, i ->
+                                subjectId = RealmInteractor.getIdOfSubject(this@MainActivity, allSubjects[i])
+                                allTopicsOfSubject = RealmInteractor.getAllTopicStringsOfSubject(this@MainActivity, subjectId)
+                            })
+                        }
+                    }
+                    button {
+                        text = "Choose Topic"
+                        setOnClickListener {
+                            selector("Choose Topic", allTopicsOfSubject, { _, i ->
+                                topicId = RealmInteractor.getTopicIdFromString(this@MainActivity, allTopicsOfSubject[i])
+                            })
+                        }
+
+                    }
+                    button {
+                        text = "Add a scribble"
+                        setOnClickListener({
+                            val i = Intent(this@MainActivity, DrawingActivity::class.java)
+                            startActivityForResult(i, REQUEST_DRAWING)
+                        })
+                    }
+
+
+                    etname = editText {
+                        hint = "Enter Name Here"
+
+                    }
+                    etdenoted = editText {
+                        hint = "Enter Denotion Here"
+                    }
+                    etvalue = editText {
+                        hint = "Enter Value Here"
+
+                    }
+                    positiveButton("Add", {
+                        RealmInteractor.addItemToDatabase(this@MainActivity, Constant(topicId, etname.text.toString(), etdenoted.text.toString(), etvalue.text.toString(), scribblePath = drawingURL))
+                        updateTabs()
+                    })
+
+                }
+
+            }
+        }.show()
+
+    }
+
     fun addDefinition(){
         drawingURL = null
         alert{
@@ -250,7 +317,7 @@ class MainActivity : CActivity() , AnkoLogger{
                         hint = "Enter Defenetion Here"
                     }
                     positiveButton("Add", {
-                        RealmInteractor.addDefinitionToDatabase(this@MainActivity, Definition(topicId, etname.text.toString(), etdefinition.text.toString(), scribblePath = drawingURL))
+                        RealmInteractor.addItemToDatabase(this@MainActivity, Definition(topicId, etname.text.toString(), etdefinition.text.toString(), scribblePath = drawingURL))
                         updateTabs()
                     })
 

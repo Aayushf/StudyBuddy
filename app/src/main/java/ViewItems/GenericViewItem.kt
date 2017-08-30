@@ -3,7 +3,6 @@ package ViewItems
 import android.content.Context
 import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.mikepenz.fastadapter.FastAdapter
@@ -11,9 +10,11 @@ import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.items.AbstractItem
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import databaseandstorage.RealmInteractor
+import objects.Constant
 import objects.Definition
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.find
+import org.jetbrains.anko.info
 import studybuddy.aayushf.studybuddy.MainActivity
 import studybuddy.aayushf.studybuddy.R
 
@@ -27,10 +28,10 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
     }
 
     override fun getType(): Int {
-        return if (dataItem is Definition){
-            Definition.TYPE
-        }else{
-            -1
+        return when (dataItem) {
+            is Definition -> Definition.TYPE
+            is Constant -> Constant.TYPE
+            else -> -1
         }
 
     }
@@ -39,6 +40,8 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
         val type = type
         return if (type == Definition.TYPE ){
             R.layout.definition_layout
+        } else if (type == Constant.TYPE) {
+            R.layout.constant_layout
         }else{
             R.layout.error_layout
         }
@@ -51,18 +54,29 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
             holder.primaryText?.text = dataItem.name
             holder.secondaryText?.text = dataItem.definition
 
+        } else if (dataItem is Constant) {
+            holder.primaryText?.text = dataItem.value
+            holder.secondaryText?.text = dataItem.denotion
+            holder.tertiaryText?.text = dataItem.name
         }
     }
 
     inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         var primaryText:TextView? = null
         var secondaryText:TextView? = null
+        var tertiaryText: TextView? = null
         var fab:FloatingActionButton? = null
+
         init {
             if (itemView.id != R.layout.error_layout){
                 primaryText = itemView.find(R.id.primarytextitem)
                 secondaryText = itemView.find(R.id.secondarytextitem)
                 fab = itemView.find(id = R.id.fabitem)
+                if (itemView.id == R.layout.constant_layout) {
+                    tertiaryText = itemView.find(R.id.tertiarytextitem)
+                    info("Tertiary Assigned")
+                }
+
             }
         }
 
