@@ -36,14 +36,15 @@
 
         </LinearLayout>
 
-        <TextView
+        <customviews.FontedTextView
             android:id="@+id/topic_card_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/llfabcard"
             android:text="TextView"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            app:fontname="customfontblack.ttf"
             android:textStyle="bold" />
 
     </RelativeLayout>

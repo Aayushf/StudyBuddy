@@ -384,10 +384,16 @@ class MainActivity : CActivity() , AnkoLogger{
         alert{
             customView {
                 title = "Show Scribble"
+                var path: String? = null
+                var item = RealmInteractor.getItem(this@MainActivity, itemid)
+                when (item) {
+                    is Definition -> path = item.scribblePath
+                    is Constant -> path = item.scribblePath
+                }
                 imageView {
-                    var path = (RealmInteractor.getItem(this@MainActivity, itemid) as Definition).scribblePath
+
                     if(path != null)
-                    imageBitmap = StorageInteractor.getBitmapFromFile(this@MainActivity, path )
+                    imageBitmap = StorageInteractor.getBitmapFromFile(this@MainActivity, path!!)
                 }
             }
         }.show()

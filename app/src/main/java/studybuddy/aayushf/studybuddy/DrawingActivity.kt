@@ -4,30 +4,16 @@ import android.Manifest
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_drawing.*
-import android.Manifest.permission
-import android.Manifest.permission.WRITE_CALENDAR
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.os.Environment
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import java.util.UUID.randomUUID
-import android.provider.MediaStore
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.util.*
-import java.nio.file.Files.exists
-import android.media.MediaScannerConnection
-import android.net.Uri
 import android.view.Menu
 import android.view.MenuItem
 import databaseandstorage.StorageInteractor
-import drawing.DrawView
+import customviews.DrawView
 import org.jetbrains.anko.*
 import org.polaric.colorful.ColorPickerDialog
-import org.polaric.colorful.Colorful
 
 
 class DrawingActivity : AppCompatActivity(), AnkoLogger {
