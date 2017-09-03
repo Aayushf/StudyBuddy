@@ -3,10 +3,7 @@ package databaseandstorage
 import android.content.Context
 import io.realm.Realm
 import io.realm.RealmObject
-import objects.Constant
-import objects.Definition
-import objects.Subject
-import objects.Topic
+import objects.*
 
 /**
  * Created by aayushf on 14/8/17.
@@ -91,21 +88,26 @@ class RealmInteractor {
         fun getItem(c:Context, id:Long):Any{
             Realm.init(c)
             val constant = Realm.getDefaultInstance().where(Constant::class.java).equalTo("itemid", id).findFirst()
-            return Realm.getDefaultInstance().where(Definition::class.java).equalTo("itemid", id).findFirst() ?: constant
+            val point = Realm.getDefaultInstance().where(Point::class.java).equalTo("itemid", id).findFirst()
+            return Realm.getDefaultInstance().where(Definition::class.java).equalTo("itemid", id).findFirst() ?: constant ?: point
         }
         fun getItemIDsOfTopic(c:Context, topicid:Long):List<Long>{
             Realm.init(c)
             val definitions = Realm.getDefaultInstance().where(Definition::class.java).equalTo("topicID", topicid).findAll().toList()
             val constants = Realm.getDefaultInstance().where(Constant::class.java).equalTo("topicID", topicid).findAll().toList()
+            val points = Realm.getDefaultInstance().where(Point::class.java).equalTo("topicID", topicid).findAll().toList()
             val listofall: MutableList<Any> = mutableListOf()
             listofall.addAll(definitions)
             listofall.addAll(constants)
+            listofall.addAll(points)
 
             return listofall.map {
                 var itemid: Long = 0
                 if (it is Definition) {
                     itemid = it.itemid
                 } else if (it is Constant) {
+                    itemid = it.itemid
+                } else if (it is Point) {
                     itemid = it.itemid
                 }
                 return@map itemid

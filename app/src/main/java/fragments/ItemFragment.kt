@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.fragment_definition.view.*
 import kotlinx.android.synthetic.main.item_fragment_content.view.*
 import objects.Constant
 import objects.Definition
+import objects.Point
 import studybuddy.aayushf.studybuddy.MainActivity
 
 import studybuddy.aayushf.studybuddy.R
@@ -44,20 +45,33 @@ var item = RealmInteractor.getItem(c!!, itemID)
                 v.item_frag_imgview.setImageBitmap(StorageInteractor.getBitmapFromFile(context, (item as Definition).scribblePath!!))
             }
             v.tvsec_item_frag.text = (item as Definition).definition
-            v.tvmain_item_frag.text = (item as Definition).name
             v.fab.setOnClickListener {
                 (c as MainActivity).speakItem(itemID)
             }
+            v.toolbar.title = (item as Definition).name
         }else if(item is Constant ){
             val v = view!!
             if ((item as Constant).scribblePath != null) {
                 v.item_frag_imgview.setImageBitmap(StorageInteractor.getBitmapFromFile(context, (item as Constant).scribblePath!!))
             }
             v.tvsec_item_frag.text = (item as Constant).name
-            v.tvmain_item_frag.text = (item as Constant).value
             v.fab.setOnClickListener {
                 (c as MainActivity).speakItem(itemID)
             }
+            v.toolbar.title = (item as Constant).name
+
+
+        } else if (item is Point) {
+            val v = view!!
+            if ((item as Point).scribblePath != null) {
+                v.item_frag_imgview.setImageBitmap(StorageInteractor.getBitmapFromFile(context, (item as Point).scribblePath!!))
+            }
+            v.tvsec_item_frag.text = (item as Point).point
+            v.toolbar.title = "Key Point"
+            v.fab.setOnClickListener {
+                (c as MainActivity).speakItem(itemID)
+            }
+
 
         }
 

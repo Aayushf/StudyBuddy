@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/fabitem"
             android:layout_width="wrap_content"
@@ -31,20 +33,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
                 android:layout_centerVertical="true"
                 android:fontFamily="sans-serif"
                 android:text="Primary"
                 android:textSize="32sp" />
-
-            <TextView
-                android:id="@+id/secondarytextitem"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/primarytextitem"
-                android:text="Secondary"
-                android:textAppearance="@style/TextAppearance.AppCompat.Light.SearchResult.Subtitle" />
 
 
         </RelativeLayout>

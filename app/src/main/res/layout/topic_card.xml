@@ -20,32 +20,33 @@
             android:text="Expand" />
 
         <RelativeLayout
+            android:id="@+id/innerrl1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/innerrl1">
+            android:layout_height="wrap_content">
         <LinearLayout
+            android:id="@+id/llfabcard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:id="@+id/llfabcard">
+            android:layout_alignParentStart="true">
             <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabcard"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/fab_margin"
-                android:id="@+id/fabcard"/>
+                android:layout_margin="@dimen/fab_margin" />
 
         </LinearLayout>
 
-        <customviews.FontedTextView
-            android:id="@+id/topic_card_tv"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_toEndOf="@+id/llfabcard"
-            android:text="TextView"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            app:fontname="customfontblack.ttf"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/topic_card_tv"
+                style="@style/Base.TextAppearance.AppCompat.Headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/llfabcard"
+                android:fontFamily="sans-serif"
+                android:text="TextView"
+                android:textSize="34sp"
+                android:textStyle="bold" />
 
     </RelativeLayout>
 

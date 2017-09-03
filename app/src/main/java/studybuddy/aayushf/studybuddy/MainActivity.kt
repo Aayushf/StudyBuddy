@@ -2,30 +2,27 @@ package studybuddy.aayushf.studybuddy
 
 import adapters.MainTabsPager
 import android.content.Intent
-import android.support.design.widget.TabLayout
-import android.support.design.widget.FloatingActionButton
-import android.support.v7.widget.Toolbar
-
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.support.design.widget.FloatingActionButton
+import android.support.design.widget.TabLayout
+import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.view.ViewPager
+import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
-import org.jetbrains.anko.startActivityForResult
 import databaseandstorage.RealmInteractor
 import databaseandstorage.StorageInteractor
 import fragments.ItemFragment
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import objects.Constant
 import objects.Definition
+import objects.Point
 import objects.Topic
 import org.jetbrains.anko.*
-import org.jetbrains.anko.selector
 import org.polaric.colorful.CActivity
 import org.polaric.colorful.ColorPickerDialog
 import org.polaric.colorful.Colorful
@@ -195,11 +192,13 @@ class MainActivity : CActivity() , AnkoLogger{
 
     }
     fun itemTypeSelect(){
-        selector("Select Type Of Item To Add", listOf("Definition", "Constant"), { _, i ->
+        selector("Select Type Of Item To Add", listOf("Definition", "Constant", "Key Point"), { _, i ->
             if(i==0){
                 addDefinition()
             } else if (i == 1) {
                 addConstant()
+            } else if (i == 2) {
+                addPoint()
             }
 
         })
@@ -409,8 +408,69 @@ class MainActivity : CActivity() , AnkoLogger{
         startActivity(i)
     }
     fun speakItem(itemid: Long){
-        mTTSObject!!.speak((RealmInteractor.getItem(this, itemid) as Definition).definition, TextToSpeech.QUEUE_FLUSH, null )
+        val item = RealmInteractor.getItem(this, itemid)
+        if (item is Definition) {
+            mTTSObject!!.speak((RealmInteractor.getItem(this, itemid) as Definition).definition, TextToSpeech.QUEUE_FLUSH, null)
+        } else if (item is Constant) {
+            mTTSObject!!.speak((RealmInteractor.getItem(this, itemid) as Constant).value, TextToSpeech.QUEUE_FLUSH, null)
+        } else if (item is Point) {
+            mTTSObject!!.speak((RealmInteractor.getItem(this, itemid) as Point).point, TextToSpeech.QUEUE_FLUSH, null)
+        }
 
+
+    }
+
+    fun addPoint() {
+        alert {
+            customView {
+                title = "Add A Defenetion"
+                var etpoint: EditText
+                var btnTopic: Button
+                val allSubjects = RealmInteractor.getAllSubjectStrings(this@MainActivity)
+                var subjectId: Long = 0
+                var allTopicsOfSubject: List<String> = listOf()
+                var topicId: Long = 0
+                verticalLayout {
+                    button {
+                        text = "Choose Subject"
+                        setOnClickListener {
+                            selector("Choose Subject", allSubjects, { _, i ->
+                                subjectId = RealmInteractor.getIdOfSubject(this@MainActivity, allSubjects[i])
+                                allTopicsOfSubject = RealmInteractor.getAllTopicStringsOfSubject(this@MainActivity, subjectId)
+                            })
+                        }
+                    }
+                    button {
+                        text = "Choose Topic"
+                        setOnClickListener {
+                            selector("Choose Topic", allTopicsOfSubject, { _, i ->
+                                topicId = RealmInteractor.getTopicIdFromString(this@MainActivity, allTopicsOfSubject[i])
+                            })
+                        }
+
+                    }
+                    button {
+                        text = "Add a scribble"
+                        setOnClickListener({
+                            val i = Intent(this@MainActivity, DrawingActivity::class.java)
+                            startActivityForResult(i, REQUEST_DRAWING)
+                        })
+                    }
+
+
+                    etpoint = editText {
+                        hint = "Enter Point Here"
+
+                    }
+                    positiveButton("Add", {
+                        RealmInteractor.addItemToDatabase(this@MainActivity, Point(topicId, etpoint.text.toString(), scribblePath = drawingURL))
+                        updateTabs()
+                    })
+
+                }
+
+            }
+        }.show()
     }
 }
 

@@ -12,6 +12,7 @@ import com.mikepenz.fastadapter.listeners.ClickEventHook
 import databaseandstorage.RealmInteractor
 import objects.Constant
 import objects.Definition
+import objects.Point
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.find
 import org.jetbrains.anko.info
@@ -24,13 +25,14 @@ import studybuddy.aayushf.studybuddy.R
 class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericViewItem, GenericViewItem.ViewHolder>(), AnkoLogger{
     val dataItem:Any = RealmInteractor.getItem(c, itemid)
     override fun getViewHolder(v: View?): ViewHolder {
-        return ViewHolder(v!!)
+        return ViewHolder(v!!, type)
     }
 
     override fun getType(): Int {
         return when (dataItem) {
             is Definition -> Definition.TYPE
             is Constant -> Constant.TYPE
+            is Point -> Point.TYPE
             else -> -1
         }
 
@@ -38,12 +40,11 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
 
     override fun getLayoutRes(): Int {
         val type = type
-        return if (type == Definition.TYPE ){
-            R.layout.definition_layout
-        } else if (type == Constant.TYPE) {
-            R.layout.constant_layout
-        }else{
-            R.layout.error_layout
+        return when (type) {
+            Definition.TYPE -> R.layout.definition_layout
+            Constant.TYPE -> R.layout.constant_layout
+            Point.TYPE -> R.layout.point_layout
+            else -> R.layout.error_layout
         }
 
     }
@@ -58,10 +59,12 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
             holder.primaryText?.text = dataItem.value
             holder.secondaryText?.text = dataItem.denotion
             holder.tertiaryText?.text = dataItem.name
+        } else if (dataItem is Point) {
+            holder.primaryText?.text = dataItem.point
         }
     }
 
-    inner class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
+    inner class ViewHolder(itemView: View, val type: Int) : RecyclerView.ViewHolder(itemView) {
         var primaryText:TextView? = null
         var secondaryText:TextView? = null
         var tertiaryText: TextView? = null
@@ -69,12 +72,17 @@ class GenericViewItem(val c:Context, val itemid:Long) : AbstractItem<GenericView
 
         init {
             if (itemView.id != R.layout.error_layout){
-                primaryText = itemView.find(R.id.primarytextitem)
-                secondaryText = itemView.find(R.id.secondarytextitem)
-                fab = itemView.find(id = R.id.fabitem)
-                if (itemView.id == R.layout.constant_layout) {
-                    tertiaryText = itemView.find(R.id.tertiarytextitem)
-                    info("Tertiary Assigned")
+                fab = itemView.find(R.id.fabitem)
+                when (type) {
+                    Definition.TYPE -> {
+                        primaryText = itemView.find(R.id.primarytextitem)
+                        secondaryText = itemView.find(R.id.secondarytextitem)
+                    }
+                    Constant.TYPE -> {
+                        tertiaryText = itemView.find(R.id.tertiarytextitem)
+                        info("Tertiary Assigned")
+                    }
+                    Point.TYPE -> primaryText = itemView.find(R.id.primarytextitem)
                 }
 
             }

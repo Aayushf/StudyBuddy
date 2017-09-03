@@ -11,30 +11,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:id="@+id/main_card_item_frag"
-        >
-
-        <TextView
-            android:id="@+id/tvmain_item_frag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="NAME"
-            android:textAlignment="center"
-            android:textAllCaps="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Headline"
-            android:textStyle="bold" />
-
-
-    </android.support.v7.widget.CardView>
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/fab_margin"
-            android:layout_below="@+id/main_card_item_frag">
+            android:layout_marginTop="@dimen/appbar_padding_top"
+            android:padding="7dp">
 
             <TextView
                 android:id="@+id/tvsec_item_frag"
